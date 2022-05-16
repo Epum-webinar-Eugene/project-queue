@@ -52,17 +52,17 @@
                 <form class="section1__form" action="" id="form">
                     <h2 class="section1__title">Електронна черга для попереднього отримання нової книжки</h2>
                     <div class="section1__inputs">
-                        <input type="text" class="section1__input" placeholder="Ваше імʼя*" required maxlength="100" name="name">
+                        <input type="text" class="section1__input" placeholder="Ваше імʼя*" required maxlength="100" name="name" id="inputName">
                     </div>
                     <div class="section1__inputs">
-                        <input type="tel" class="section1__input" placeholder="Ваш номер телефону*" required name="telephone">
+                        <input type="tel" class="section1__input" placeholder="Ваш номер телефону*" required name="telephone" id="inputNumber">
                     </div>
                     <div class="section1__inputs">
-                        <input type="email" class="section1__input" placeholder="Ваша пошта*" required maxlength="100" name="email">
+                        <input type="email" class="section1__input" placeholder="Ваша пошта*" required maxlength="100" name="email" id="inputEmail">
                     </div>
                     <div class="section1__inputs section1__inputs_style">
                         <label for="selectList" class="section1__label">Оберіть книжку:</label>
-                        <select class="section1__select" required id="selectList"></select>
+                        <select class="section1__select" required id="selectList" name="select"></select>
                     </div>
                     <div class="section1__btn">
                         <button type="submit" class="section1__button" id="regQueue">Встати в чергу</button>

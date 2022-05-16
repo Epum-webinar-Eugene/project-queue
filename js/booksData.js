@@ -46,13 +46,13 @@ const booksData = [
     {
         "id": 7777,
         "name": "Проблеми надзвичайно багатих азіатів",
-        "poster": "./img/books/The problems of insanly rich asians.jpg"
+        "poster": "./img/books/The problems of insanly rich Asians.jpg"
     },
 
     {
         "id": 79,
         "name": "Прованс назавжди",
-        "poster": "./img/books/the provance forever.jpg"
+        "poster": "./img/books/The provance forever.jpg"
     },
 
     {

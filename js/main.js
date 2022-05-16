@@ -66,9 +66,115 @@ function renderChangedBook(val) {
     });
 };
 
+//Власна валідація імені користувача у формі
+function validateName(value) {
+    let inputName = document.querySelector('#inputName'),
+        avail = false;
+
+    value = value.replace(/\s+/g, '');
+
+    switch (true) {
+        case (!value.trim() === true):
+            inputName.value = "Ім'я не може бути порожнім";
+
+            break;
+
+        case (value.length < 2):
+            inputName.value = "Ім'я занадто коротке!";
+
+            break;
+
+        case (/[~`!?@_"'#$№;:.,%^&*/()+=|{}[<>\]-]/g.test(value) === true):
+            inputName.value = "Ім'я не може мати ніяких знаків!";
+
+            break;
+
+        case (/[0-9]/g.test(value) === true):
+            inputName.value = "Ім'я не може мати ніяких цифр!";
+            
+            break;
+
+        default:
+            avail = true;
+
+            break;
+        };
+
+    return avail;
+};
+
+//Регулярний вираз для валідації пошти користувача
+function emailRegexp(value) {
+    const regexp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    
+    return regexp.test(value);
+};
+
+//Валідація пошти користувача
+function validateEmail(value) {
+    let avail = false;
+
+    value = value.replace(/\s+/g, '');
+
+    if (emailRegexp(value) === false) {
+        document.querySelector('#inputEmail').value = 'Невірний формат пошти!';
+    }
+
+    else {
+        avail = true;
+    };
+
+    return avail;
+};
+
+//Відправка даних користувача для електронної черги
+function sendUserData() {
+    const data = new FormData(document.querySelector('#form')),
+        request = new XMLHttpRequest();
+
+    request.open('POST', '../php/main.php');
+
+    request.send(data);
+
+    request.addEventListener('load', () => {
+        if (request.readyState === 4 && request.status === 200) {
+            alert("Ви успішно встали у чергу. Очікуйте на зворотній зв'язок від нашого оператору.");
+
+            localStorage.setItem("clientPhoneNumber", document.querySelector('#inputNumber').value);
+
+            document.querySelector('#form').reset();
+
+            selectedBook.src = booksData[0].poster;
+
+            console.log(request.readyState, request.statusText);
+        }
+
+        else {
+            alert("Помилка. Будь-ласка перезагрузіть сторінку та спробуйте ще раз.");
+        };
+    });
+
+    request.addEventListener('error', () => {
+        console.log(request.readyState, request.statusText);
+    });
+};
+
+//Перевірка усіх полей форми на вірність та номеру телефона користувача на унікальність, яка дозволяє перевірити, чи вставав користувач у чергу раніше чи ні.
 document.querySelector('#form').addEventListener('submit', function(e) {
     e.preventDefault();
 
-    alert('Ви встали у чергу!');
-    location.reload();
+    validateName(document.querySelector('#inputName').value);
+    validateEmail(document.querySelector('#inputEmail').value);
+
+    if (validateName(document.querySelector('#inputName').value) === true && validateEmail(document.querySelector('#inputEmail').value)=== true) {
+        if (document.querySelector('#inputNumber').value === localStorage.getItem("clientPhoneNumber")) {
+            alert('На даний момент ви вже стоїте у черзі за книжкою.');
+            document.querySelector('#form').reset();
+        } else {
+            sendUserData();
+        };
+
+    } else {
+        return;
+    };
 });
